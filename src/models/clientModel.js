@@ -27,7 +27,36 @@ const selectAll = async (userid) => {
     }
 };
 
+const edit = async (client) => {
+    try {
+        const { id, name, email, telephone, instagram } = client;
+        const sql = 'UPDATE clients SET name=?, email=?, telephone=?, instagram=? WHERE id=?';
+        const [result] = await connection.execute(sql, [name, email, telephone, instagram, id]);
+        return result;
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Falha ao comunicar com o banco.',
+            error: err.message
+        });
+    }
+};
+
+const deleteClient = async (clientid) => {
+    try {
+        const sql = 'DELETE FROM clients WHERE id = ?';
+        const [result] = await connection.execute(sql, [clientid]);
+        return result;
+    } catch (err) {
+        return res.status(500).json({
+            message: 'Falha ao se comunicar com o banco.',
+            error: err.message
+        });
+    }
+};
+
 module.exports = {
     create,
-    selectAll
+    selectAll,
+    edit,
+    deleteClient
 };
