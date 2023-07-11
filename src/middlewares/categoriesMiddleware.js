@@ -1,10 +1,10 @@
 const validatorCreate = (req, res, next) => {
     const { body } = req;
-    if (body.userid === undefined || body.name === undefined || body.email === undefined || body.telephone === undefined || body.instagram === undefined) {
+    if (body.userid === undefined || body.name === undefined || body.price === undefined) {
         return res.status(400).json({ message: 'Todos os campos são obrigatórios!' });
     }
 
-    if (body.userid === '' || body.name === '' || body.email === '' || body.telephone === '' || body.instagram === '') return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
+    if (body.userid === '' || body.name === '' || body.price === '') return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
 
     next();
 
@@ -28,9 +28,8 @@ const ValidatorUserid = (req, res, next) => {
     next();
 };
 
-const ValidatorClientId = (req, res, next) => {
+const ValidatorCategoryId = (req, res, next) => {
     const id = req.params.id;
-    console.log(id)
 
     if (id === undefined || id === ''){
         return res.status(400).json({ message: 'O campo id é obrigatório!' });
@@ -43,5 +42,5 @@ module.exports = {
     validatorCreate,
     validatorEdit,
     ValidatorUserid,
-    ValidatorClientId
+    ValidatorCategoryId
 };
