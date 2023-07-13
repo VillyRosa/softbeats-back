@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Tempo de geração: 12/07/2023 às 18:56
+-- Tempo de geração: 13/07/2023 às 19:00
 -- Versão do servidor: 10.4.28-MariaDB
 -- Versão do PHP: 8.2.4
 
@@ -20,6 +20,58 @@ SET time_zone = "+00:00";
 --
 -- Banco de dados: `softbeats`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `address`
+--
+
+CREATE TABLE `address` (
+  `id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `cep` varchar(9) NOT NULL,
+  `state` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `neighborhood` varchar(255) NOT NULL,
+  `street` varchar(255) NOT NULL,
+  `number` varchar(255) NOT NULL,
+  `complement` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `address`
+--
+
+INSERT INTO `address` (`id`, `client_id`, `cep`, `state`, `city`, `neighborhood`, `street`, `number`, `complement`) VALUES
+(2, 49, '16050-630', 'SP', 'Araçatuba', 'Dona Amélia', 'Carlos de Campos', '552', ''),
+(4, 53, '16050-630', 'SP', 'Araçatuba', 'Dona Amélia', 'Carlos de Campos', '552', ''),
+(5, 54, '16050600', 'SP', 'Araçatuba', 'Dona Amélia', 'Rua Álvares de Azevedo', '300', 'de 382/383 a 1270/1271');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `beats`
+--
+
+CREATE TABLE `beats` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `category_id` int(11) NOT NULL,
+  `gender_id` int(11) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `image` varchar(255) NOT NULL,
+  `audio` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Despejando dados para a tabela `beats`
+--
+
+INSERT INTO `beats` (`id`, `user_id`, `category_id`, `gender_id`, `description`, `name`, `image`, `audio`) VALUES
+(1, 1, 10, 4, 'Beat brabo.', 'Beat do Mario', 'https://img.elo7.com.br/product/zoom/F2478F/adesivo-quadrado-5x5-cm-adesivo-quadrado.jpg', 'http://localhost:3001/uploads/5a714ed544fcc84363d536d235177468.mp3'),
+(2, 1, 10, 4, 'teste', 'Mario 2', 'https://m.media-amazon.com/images/I/51iepufy27S._AC_UF894,1000_QL80_.jpg', 'http://localhost:3001/uploads/e1a7973c9116eb6a1e0dfb510acd1c66.mp3');
 
 -- --------------------------------------------------------
 
@@ -67,13 +119,9 @@ CREATE TABLE `clients` (
 --
 
 INSERT INTO `clients` (`id`, `user_id`, `name`, `email`, `telephone`, `instagram`) VALUES
-(12, 1, 'Eduardo Ado Viado', 'adoviado@gmail.com', '(18) 64646-6464', '@duadoviado'),
-(13, 1, 'Luiz Esquisito', 'luiz@gmail.com', '18955174421', '@luizmamaovo'),
-(14, 1, 'Plínio Costa', 'plinio@gmail.com', '18468468455', '@plinio_da_quebrada'),
-(16, 1, 'José Cunha', 'zecunha@gmail.com', '98592349233', '@zecunha'),
-(21, 1, 'dawdawdawdawd', 'dawdwadadawdawd', '21313213213', 'adwdawdaddad'),
-(22, 1, 'dawdawdadawda', 'dwadwddwa', '31232132132', '@dawdaw'),
-(30, 1, 'Teste', 'teste@gmail.com', '23123214212', '@teste');
+(49, 1, 'Teste Para retornar', 'adoviado@gmail.com', '(18) 64646-6464', '@duadoviado'),
+(53, 1, 'Teste Para retornar', 'adoviado@gmail.com', '(18) 64646-6464', '@duadoviado'),
+(54, 1, 'Villy Oliveira Rosa', 'villy@hotmail.com', '18988169921', '@villyrosa');
 
 -- --------------------------------------------------------
 
@@ -93,7 +141,23 @@ CREATE TABLE `genders` (
 --
 
 INSERT INTO `genders` (`id`, `user_id`, `name`, `description`) VALUES
-(2, 1, 'Terror', 'TESTEEEEE');
+(2, 1, 'Terror', 'TESTEEEEE'),
+(4, 1, 'Trap', 'Gênero foda');
+
+-- --------------------------------------------------------
+
+--
+-- Estrutura para tabela `sales`
+--
+
+CREATE TABLE `sales` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `beat_id` int(11) NOT NULL,
+  `price` double(10,2) NOT NULL,
+  `datetime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -121,6 +185,22 @@ INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
 --
 
 --
+-- Índices de tabela `address`
+--
+ALTER TABLE `address`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `address_ibfk_1` (`client_id`);
+
+--
+-- Índices de tabela `beats`
+--
+ALTER TABLE `beats`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `category_id` (`category_id`),
+  ADD KEY `gender_id` (`gender_id`);
+
+--
 -- Índices de tabela `categories`
 --
 ALTER TABLE `categories`
@@ -142,6 +222,15 @@ ALTER TABLE `genders`
   ADD KEY `user_id` (`user_id`);
 
 --
+-- Índices de tabela `sales`
+--
+ALTER TABLE `sales`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `client_id` (`client_id`),
+  ADD KEY `beat_id` (`beat_id`);
+
+--
 -- Índices de tabela `users`
 --
 ALTER TABLE `users`
@@ -150,6 +239,18 @@ ALTER TABLE `users`
 --
 -- AUTO_INCREMENT para tabelas despejadas
 --
+
+--
+-- AUTO_INCREMENT de tabela `address`
+--
+ALTER TABLE `address`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de tabela `beats`
+--
+ALTER TABLE `beats`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `categories`
@@ -161,13 +262,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT de tabela `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT de tabela `genders`
 --
 ALTER TABLE `genders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `sales`
+--
+ALTER TABLE `sales`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `users`
@@ -178,6 +285,20 @@ ALTER TABLE `users`
 --
 -- Restrições para tabelas despejadas
 --
+
+--
+-- Restrições para tabelas `address`
+--
+ALTER TABLE `address`
+  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`);
+
+--
+-- Restrições para tabelas `beats`
+--
+ALTER TABLE `beats`
+  ADD CONSTRAINT `beats_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `beats_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
+  ADD CONSTRAINT `beats_ibfk_3` FOREIGN KEY (`gender_id`) REFERENCES `genders` (`id`);
 
 --
 -- Restrições para tabelas `categories`
@@ -196,6 +317,14 @@ ALTER TABLE `clients`
 --
 ALTER TABLE `genders`
   ADD CONSTRAINT `genders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+
+--
+-- Restrições para tabelas `sales`
+--
+ALTER TABLE `sales`
+  ADD CONSTRAINT `sales_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  ADD CONSTRAINT `sales_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`),
+  ADD CONSTRAINT `sales_ibfk_3` FOREIGN KEY (`beat_id`) REFERENCES `beats` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

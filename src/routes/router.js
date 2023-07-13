@@ -3,6 +3,7 @@ const dashboard = require('./dashboardRoutes');
 const clients = require('./clientRoutes');
 const categories = require('./categoriesRoutes');
 const genders = require('./gendersRoutes');
+const beats = require('./beatsRoutes');
 
 const routes = (app) => {
     app.use(
@@ -10,7 +11,8 @@ const routes = (app) => {
         dashboard,
         clients,
         categories,
-        genders
+        genders,
+        beats
     );
 };
 
