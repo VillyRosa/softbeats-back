@@ -8,6 +8,14 @@ const ValidatorUserid = (req, res, next) => {
     next();
 };
 
+const ValidatorCreate = (req, res, next) => {
+
+    console.log(req);
+
+    next();
+};
+
 module.exports = {
     ValidatorUserid,
+    ValidatorCreate
 };

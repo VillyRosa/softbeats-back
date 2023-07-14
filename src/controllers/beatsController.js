@@ -10,6 +10,16 @@ const selectAllController = async(req, res) => {
     }
 };
 
+const createController = async (req, res) => {
+    try {
+        await beatModel.create();
+        res.status(201).json({ message: 'Beat cadastrada com sucesso!' });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao cadastrar o beat.' });
+    }
+};
+
 module.exports = {
     selectAllController,
+    createController
 };
