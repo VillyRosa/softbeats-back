@@ -4,6 +4,7 @@ const clients = require('./clientRoutes');
 const categories = require('./categoriesRoutes');
 const genders = require('./gendersRoutes');
 const beats = require('./beatsRoutes');
+const sales = require('./salesRoutes');
 
 const routes = (app) => {
     app.use(
@@ -12,7 +13,8 @@ const routes = (app) => {
         clients,
         categories,
         genders,
-        beats
+        beats,
+        sales
     );
 };
 
