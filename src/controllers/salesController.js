@@ -31,7 +31,7 @@ const editController = async(req, res) => {
 const deleteController = async(req, res) => {
     try {
         const id = req.params.id;
-        await salesModel.deleteCategory(id);
+        await salesModel.deleteSale(id);
         return res.status(200).json( { message: 'Venda excluida com sucesso!' } );
     } catch(err) {
         res.status(500).send({ message: 'Venda não encontrada!' });

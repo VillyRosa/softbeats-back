@@ -70,10 +70,14 @@ const edit = async (gender) => {
     };
 };
 
-const deleteGender = async (genderid) => {
+const deleteSale = async (saleid) => {
     try {
-        const sql = 'DELETE FROM genders WHERE id = ?';
-        const [result] = await connection.execute(sql, [genderid]);
+
+        const deleteCascate = 'DELETE FROM sale_itens WHERE sale_id = ?';
+        await connection.execute(deleteCascate, [saleid])
+
+        const sql = 'DELETE FROM sales WHERE id = ?';
+        const [result] = await connection.execute(sql, [saleid]);
         return result;
     } catch (err) {
         return res.status(500).json({
@@ -87,5 +91,5 @@ module.exports = {
     create,
     selectAll,
     edit,
-    deleteGender
+    deleteSale
 };
