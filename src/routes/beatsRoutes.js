@@ -7,16 +7,10 @@ const beatMiddleware = require('../middlewares/beatsMiddleware');
 
 const router = express.Router();
 
-const storage = multer.diskStorage({
+// Configuração do multer para upload de imagem
+const imageStorage = multer.diskStorage({
     destination: (req, file, cb) => {
-        let destinationFolder = '';
-        if (file.fieldname === 'image') {
-            destinationFolder = 'uploads/images';
-        } else if (file.fieldname === 'audio') {
-            destinationFolder = 'uploads/audios';
-        } else {
-            return cb(new Error('Campo inválido'));
-        }
+        const destinationFolder = 'uploads/images';
         cb(null, destinationFolder);
     },
     filename: (req, file, cb) => {
@@ -30,28 +24,43 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ storage: storage });
+// Configuração do multer para upload de áudio
+const audioStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const destinationFolder = 'uploads/audios';
+        cb(null, destinationFolder);
+    },
+    filename: (req, file, cb) => {
+        crypto.randomBytes(16, (err, raw) => {
+            if (err) return cb(err);
 
-router.get('/beats/:userid', beatMiddleware.ValidatorUserid, beatController.selectAllController);
-router.post('/beats', upload.fields([{ name: 'image', maxCount: 1 }, { name: 'audio', maxCount: 1 }]), beatMiddleware.ValidatorCreate, (req, res, next) => {
-
-    const { body } = req;
-    const imageFile = req.files['image'] ? req.files['image'][0] : null;
-    const audioFile = req.files['audio'] ? req.files['audio'][0] : null;
-
-    if (!body.name) return res.status(400).send('Falta o nome')
-
-    if (imageFile && audioFile) {
-        // O arquivo é uma imagem, faça o processamento necessário
-        res.status(201).send({ message: 'Beat cadastrado com sucesso!.'});
-    } else {
-        return res.status(400).send({ message: 'Nenhum arquivo foi enviado.'});
+            const ext = path.extname(file.originalname);
+            const fileName = raw.toString('hex') + ext;
+            cb(null, fileName);
+        });
     }
-
-    // Continue com o processamento da requisição ou chame o próximo middleware
-    next();
 });
 
+const uploadAudio = multer({ storage: audioStorage }).single('audio');
+const uploadImage = multer({ storage: imageStorage }).single('image');
+
+router.post('/beats/image', uploadImage, (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({ message: 'Nenhuma imagem foi enviada.' });
+    }
+    const imageName = req.file.filename;
+    res.status(201).send({ message: 'Imagem enviada com sucesso.', imageName });
+});
+
+router.post('/beats/audio', uploadAudio, (req, res) => {
+    if (!req.file) {
+        return res.status(400).send({ message: 'Nenhum arquivo de áudio foi enviado.' });
+    }
+    const audioName = req.file.filename;
+    res.status(201).send({ message: 'Áudio enviado com sucesso.', audioName });
+});
+
+router.get('/beats/:userid', beatMiddleware.ValidatorUserid, beatController.selectAllController);
 // router.delete('/beats/:id', beatMiddleware.ValidatorCategoryId, beatController.deleteController);
 // router.patch('/beats', beatMiddleware.validatorEdit, beatController.editController);
 
