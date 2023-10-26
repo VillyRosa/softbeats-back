@@ -1,6 +1,3 @@
-const multer = require('multer');
-const crypto = require('crypto');
-const path = require('path');
 const connection = require('./connection');
 
 const selectAll = async (userid) => {
@@ -16,11 +13,39 @@ const selectAll = async (userid) => {
     };
 };
 
-const create = async (req, res) => {
-   
+const create = async (beat) => {
+    try {
+        const { userid, categoryid, genderid, description, name, image, audio } = beat;
+        const sql = 'INSERT INTO beats (id, user_id, category_id, gender_id, description, name, image, audio) VALUES (null, ?, ?, ?, ?, ?, ?, ?)';
+        console.log(beat);
+        const [result] = await connection.execute(sql, [userid, categoryid, genderid, description, name, image, audio]);
+        return result;
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            message: 'Falha ao se comunicar com o banco.',
+            error: err.message
+        });
+    };
 };
+
+const deleteBeat = async (beatId) => {
+    try {
+        const id = beatId;
+        const sql = 'DELETE FROM beats WHERE id = ?';
+        const [result] = await connection.execute(sql, [id]);
+        return result;
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            message: 'Falha ao se comunicar com o banco.',
+            error: err.message
+        });
+    }
+}
 
 module.exports = {
     create,
     selectAll,
+    deleteBeat
 };

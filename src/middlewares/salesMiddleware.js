@@ -6,8 +6,6 @@ const validatorCreate = (req, res, next) => {
 
     if (body.userid === '' || body.clientid === '') return res.status(400).json({ message: 'Os campos não podem estar vazios!' });
 
-    if (body.itens.length === 0) return res.status(400).json({ message: "Nenhum item inserido na venda!" });
-
     next();
 
 };

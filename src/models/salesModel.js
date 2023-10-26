@@ -8,17 +8,9 @@ const create = async (sale) => {
         const formatDate = format(date, 'yyyy-MM-dd HH:mm:ss');
         console.log(formatDate);
 
-        const { userid, clientid, itens } = sale;
-        const sql = 'INSERT INTO sales (id, user_id, client_id, datetime) VALUES (null, ?, ?, ?)';
-        await connection.execute(sql, [userid, clientid, formatDate]);
-
-        const sqlGetLastSale = 'SELECT id FROM `sales` WHERE user_id=? ORDER BY id DESC LIMIT 1';
-        const [resLastSale] = await connection.execute(sqlGetLastSale, [userid]);
-
-        itens.forEach(async item => {
-            const insertItem = 'INSERT INTO sale_itens (sale_itens_id, sale_id, beat_id, price) VALUES (null, ?, ?, ?)';
-            await connection.execute(insertItem, [resLastSale[0].id, item.beatid, item.price])
-        });
+        const { userid, clientid, beatid, price } = sale;
+        const sql = 'INSERT INTO sales (id, user_id, client_id, beat_id, price, datetime) VALUES (null, ?, ?, ?, ?, ?)';
+        await connection.execute(sql, [userid, clientid, beatid, price, formatDate]);
 
     } catch (err) {
         console.log(err)
@@ -31,21 +23,8 @@ const create = async (sale) => {
 
 const selectAll = async (userid) => {
     try {
-        const sql = 'SELECT * FROM sales WHERE user_id = ?';
+        const sql = 'SELECT * FROM sales WHERE user_id = ? ORDER BY datetime DESC';
         let result = await connection.execute(sql, [userid]);
-
-        for (let sale of result[0]) {
-            // console.log(sale.datetime);
-            // sale.datetime = format(utcToZonedTime(dataUTC, 'America/Sao_Paulo'), 'yyyy-MM-dd HH:mm:ss');
-
-            const selectItens = 'SELECT * FROM sale_itens WHERE sale_id = ?';
-            const resItens = await connection.execute(selectItens, [sale.id]);
-      
-            sale.itens = resItens[0];
-
-            sale.totalPrice = 0;
-            sale.totalPrice = sale.itens.reduce((total, sale) => total + parseFloat(sale.price), 0);
-        }
 
         return result[0];
     } catch (err) {
