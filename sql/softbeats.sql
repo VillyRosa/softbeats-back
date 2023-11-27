@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Tempo de geração: 31/08/2023 às 04:22
--- Versão do servidor: 10.4.28-MariaDB
--- Versão do PHP: 8.2.4
+-- Host: localhost
+-- Tempo de geração: 27/11/2023 às 21:52
+-- Versão do servidor: 10.4.27-MariaDB
+-- Versão do PHP: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,33 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Estrutura para tabela `address`
---
-
-CREATE TABLE `address` (
-  `id` int(11) NOT NULL,
-  `client_id` int(11) NOT NULL,
-  `cep` varchar(9) NOT NULL,
-  `state` varchar(255) NOT NULL,
-  `city` varchar(255) NOT NULL,
-  `neighborhood` varchar(255) NOT NULL,
-  `street` varchar(255) NOT NULL,
-  `number` varchar(255) NOT NULL,
-  `complement` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `address`
---
-
-INSERT INTO `address` (`id`, `client_id`, `cep`, `state`, `city`, `neighborhood`, `street`, `number`, `complement`) VALUES
-(2, 49, '16050-630', 'SP', 'Araçatuba', 'Dona Amélia', 'Carlos de Campos', '552', ''),
-(4, 53, '16050-630', 'SP', 'Araçatuba', 'Dona Amélia', 'Carlos de Campos', '552', ''),
-(5, 54, '16050600', 'SP', 'Araçatuba', 'Dona Amélia', 'Rua Álvares de Azevedo', '300', 'de 382/383 a 1270/1271');
-
--- --------------------------------------------------------
-
---
 -- Estrutura para tabela `beats`
 --
 
@@ -62,16 +35,9 @@ CREATE TABLE `beats` (
   `description` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
-  `audio` varchar(255) NOT NULL
+  `audio` varchar(255) NOT NULL,
+  `bpm` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `beats`
---
-
-INSERT INTO `beats` (`id`, `user_id`, `category_id`, `gender_id`, `description`, `name`, `image`, `audio`) VALUES
-(1, 1, 10, 4, 'Beat brabo.', 'Beat do Mario', 'https://img.elo7.com.br/product/zoom/F2478F/adesivo-quadrado-5x5-cm-adesivo-quadrado.jpg', 'http://localhost:3001/uploads/5a714ed544fcc84363d536d235177468.mp3'),
-(2, 1, 10, 4, 'teste', 'Mario 2', 'https://m.media-amazon.com/images/I/51iepufy27S._AC_UF894,1000_QL80_.jpg', 'http://localhost:3001/uploads/e1a7973c9116eb6a1e0dfb510acd1c66.mp3');
 
 -- --------------------------------------------------------
 
@@ -86,21 +52,6 @@ CREATE TABLE `categories` (
   `price` double(10,2) NOT NULL,
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `categories`
---
-
-INSERT INTO `categories` (`id`, `user_id`, `name`, `price`, `description`) VALUES
-(2, 1, 'Secundária', 40.00, 'Descrição teste 2!'),
-(7, 10, 'Lease', 80.00, 'Beat lease'),
-(8, 10, 'Exclusivo', 300.00, 'Beat exclusivo'),
-(9, 10, 'Encomenda', 1000.00, 'Beat por encomenda'),
-(10, 1, 'Lease', 80.00, 'Beat lease'),
-(11, 1, 'Exclusivo', 300.00, 'Beat exclusivo'),
-(12, 11, 'Lease', 80.00, 'Beat lease'),
-(13, 11, 'Exclusivo', 300.00, 'Beat exclusivo'),
-(14, 11, 'Encomenda', 1000.00, 'Beat por encomenda');
 
 -- --------------------------------------------------------
 
@@ -117,15 +68,6 @@ CREATE TABLE `clients` (
   `instagram` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Despejando dados para a tabela `clients`
---
-
-INSERT INTO `clients` (`id`, `user_id`, `name`, `email`, `telephone`, `instagram`) VALUES
-(49, 1, 'Teste Para retornar', 'adoviado@gmail.com', '(18) 64646-6464', '@duadoviado'),
-(53, 1, 'Teste Para retornar', 'adoviado@gmail.com', '(18) 64646-6464', '@duadoviado'),
-(54, 1, 'Villy Oliveira Rosa', 'villy@hotmail.com', '18988169921', '@villyrosa');
-
 -- --------------------------------------------------------
 
 --
@@ -138,14 +80,6 @@ CREATE TABLE `genders` (
   `name` varchar(255) NOT NULL,
   `description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Despejando dados para a tabela `genders`
---
-
-INSERT INTO `genders` (`id`, `user_id`, `name`, `description`) VALUES
-(2, 1, 'Terror', 'TESTEEEEE'),
-(4, 1, 'Trap', 'Gênero foda');
 
 -- --------------------------------------------------------
 
@@ -176,24 +110,8 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Despejando dados para a tabela `users`
---
-
-INSERT INTO `users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'Villy Oliveira Rosa', 'villyrosa@gmail.com', '$2b$10$tBSjrX/fHp5k7Jz1xPZ.8O965rBcuDVlhHeglpSXQTXq8P8LUB5zi'),
-(10, 'teste', 'teste@gmail.com', '$2b$10$jylSntwwhCaqaYeGvJfUNuir5Hyk4Oa9YFtVpuS2ofiVC0C.CeifC'),
-(11, 'matheus', 'matheus@gay.com', '$2b$10$BkJp5NeQ6iUY46Gg0mAhSuKnXQ8L8QLQ5YzGSNHUzBlehHnYLtLte');
-
---
 -- Índices para tabelas despejadas
 --
-
---
--- Índices de tabela `address`
---
-ALTER TABLE `address`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `address_ibfk_1` (`client_id`);
 
 --
 -- Índices de tabela `beats`
@@ -245,56 +163,44 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT de tabela `address`
---
-ALTER TABLE `address`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
-
---
 -- AUTO_INCREMENT de tabela `beats`
 --
 ALTER TABLE `beats`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `categories`
 --
 ALTER TABLE `categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `clients`
 --
 ALTER TABLE `clients`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `genders`
 --
 ALTER TABLE `genders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `sales`
 --
 ALTER TABLE `sales`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de tabela `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restrições para tabelas despejadas
 --
-
---
--- Restrições para tabelas `address`
---
-ALTER TABLE `address`
-  ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`);
 
 --
 -- Restrições para tabelas `beats`

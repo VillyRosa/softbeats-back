@@ -1,5 +1,4 @@
 const { format } = require('date-fns-tz');
-// const { utcToZonedTime } = require('date-fns');
 const connection = require('./connection');
 
 const create = async (sale) => {
@@ -35,13 +34,14 @@ const selectAll = async (userid) => {
     };
 };
 
-const edit = async (gender) => {
+const edit = async (sale) => {
     try {
-        const { id, name, description } = gender;
-        const sql = 'UPDATE genders SET name=?, description=? WHERE id=?';
-        const [result] = await connection.execute(sql, [name, description, id]);
+        const { id, clientid, beatid, price } = sale;
+        const sql = 'UPDATE sales SET client_id=?, beat_id=?, price=? WHERE id=?';
+        const [result] = await connection.execute(sql, [clientid, beatid, price, id]);
         return result;
     } catch (err) {
+        console.log(err);
         return res.status(500).json({
             message: 'Falha ao comunicar com o banco.',
             error: err.message
@@ -51,10 +51,6 @@ const edit = async (gender) => {
 
 const deleteSale = async (saleid) => {
     try {
-
-        const deleteCascate = 'DELETE FROM sale_itens WHERE sale_id = ?';
-        await connection.execute(deleteCascate, [saleid])
-
         const sql = 'DELETE FROM sales WHERE id = ?';
         const [result] = await connection.execute(sql, [saleid]);
         return result;

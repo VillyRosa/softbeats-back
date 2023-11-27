@@ -3,8 +3,9 @@ const connection = require('./connection');
 const create = async (client) => {
     try {
         const { userid, name, email, telephone, instagram } = client;
+        const telephoneFormated = `(${telephone.slice(0, 2)}) ${telephone.slice(2, 7)}-${telephone.slice(7, 11)}`;
         const sql = 'INSERT INTO clients (id, user_id, name, email, telephone, instagram) VALUES (null, ?, ?, ?, ?, ?)';
-        const [result] = await connection.execute(sql, [userid, name, email, telephone, instagram]);
+        const [result] = await connection.execute(sql, [userid, name, email, telephoneFormated, instagram]);
 
         return result;
     } catch (err) {

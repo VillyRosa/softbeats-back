@@ -46,7 +46,7 @@ const uploadImage = multer({ storage: imageStorage }).single('image');
 
 router.post('/beats/image', uploadImage, (req, res) => {
     if (!req.file) {
-        return res.status(400).send({ message: 'Nenhuma imagem foi enviada.' });
+        return res.status(201).send({ message: 'Nenhuma imagem foi enviada.', imageName: 'logo-padrao.png' });
     }
     const imageName = req.file.filename;
     res.status(201).send({ message: 'Imagem enviada com sucesso.', imageName });
@@ -62,9 +62,8 @@ router.post('/beats/audio', uploadAudio, (req, res) => {
 
 router.post('/beats', beatMiddleware.ValidatorCreate, beatController.createController);
 router.get('/beats/:userid', beatMiddleware.ValidatorUserid, beatController.selectAllController);
-router.delete('/beats', beatMiddleware.ValidatorBeatId);
 router.delete('/beats/:id', beatMiddleware.ValidatorBeatId, beatController.deleteController);
-// router.patch('/beats', beatMiddleware.validatorEdit, beatController.editController);
+router.patch('/beats', beatMiddleware.validatorEdit, beatController.editController);
 router.get('/beats/image/:filename', (req, res) => {
     const filename = req.params.filename;
     const imagePath = path.join(__dirname, '..', '..', 'uploads', 'images', filename);

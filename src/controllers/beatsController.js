@@ -29,8 +29,18 @@ const deleteController = async (req, res) => {
     }
 }
 
+const editController = async (req, res) => {
+    try {
+        await beatModel.editBeat(req.body);
+        res.status(201).json({ message: 'Beat editado com sucesso!' });
+    } catch (err) {
+        res.status(500).json({ message: 'Erro ao editar o beat.' });
+    }
+};
+
 module.exports = {
     selectAllController,
     createController,
-    deleteController
+    deleteController,
+    editController
 };
