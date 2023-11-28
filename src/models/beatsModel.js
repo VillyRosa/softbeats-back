@@ -17,7 +17,8 @@ const selectAll = async (userid) => {
 
 const create = async (beat) => {
     try {
-        const { userid, categoryid, genderid, description, name, image, audio, bpm } = beat;
+        let { userid, categoryid, genderid, description, name, image, audio, bpm } = beat;
+        if (!bpm) bpm = 0;
         const sql = 'INSERT INTO beats (id, user_id, category_id, gender_id, description, name, image, audio, bpm) VALUES (null, ?, ?, ?, ?, ?, ?, ?, ?)';
         console.log(beat);
         const [result] = await connection.execute(sql, [userid, categoryid, genderid, description, name, image, audio, bpm]);
