@@ -34,6 +34,7 @@ const deleteController = async(req, res) => {
         await clientModel.deleteClient(id);
         return res.status(200).json( { message: 'Cliente excluido com sucesso!' } );
     } catch(err) {
+        console.log(err);
         res.status(500).send({ message: 'Cliente não encontrados!' });
     }
 };
